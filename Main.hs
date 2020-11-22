@@ -45,6 +45,7 @@ main = do
       <*> optional (option auto $ long "row-max" <> help "Row to end pixel smearing")
       <*> optional (option auto $ long "col-min" <> help "Column to start pixel smearing")
       <*> optional (option auto $ long "col-max" <> help "Column to end pixel smearing")
+      <*> switch (long "smear-down" <> help "Use the row min as the base row, instead of row max")
 
     makeFileName imgPath suffix =
       let baseDir     = imgPath ^. directory
@@ -55,11 +56,12 @@ main = do
 
 
 data CLI = CLI
-  { cliPath   :: FilePath
-  , cliRowMin :: Maybe Int
-  , cliRowMax :: Maybe Int
-  , cliColMin :: Maybe Int
-  , cliColMax :: Maybe Int
+  { cliPath      :: FilePath
+  , cliRowMin    :: Maybe Int
+  , cliRowMax    :: Maybe Int
+  , cliColMin    :: Maybe Int
+  , cliColMax    :: Maybe Int
+  , cliSmearDown :: Bool
   } deriving (Eq, Show)
 
 
@@ -73,7 +75,7 @@ makeSmearedImage CLI {..} img@Image {..} = runST $ do
       rMax = fromMaybe imageHeight cliRowMax
       cMin = fromMaybe 0 cliColMin
       cMax = fromMaybe imageWidth cliColMax
-      baseRow = makeBaseRow rMax cMin cMax img
+      baseRow = makeBaseRow (if cliSmearDown then rMin else rMax) cMin cMax img
   go rMin rMax cMin cMax imageWidth imageData baseRow mimg
   where
     go r r' c c' iw d baseRow mimg
@@ -90,13 +92,13 @@ makeSmearedImage CLI {..} img@Image {..} = runST $ do
 
 
 makeBaseRow
-  :: Int -- ^ Max row.
+  :: Int -- ^ Start row.
   -> Int -- ^ Min column.
   -> Int -- ^ Max column.
   -> Image PixelRGBA8
   -> V.Vector PixelRGBA8
-makeBaseRow rMax cMin cMax Image {..} =
-  let raw = VS.take (4 * (cMax - cMin)) $ VS.drop (4 * (rMax * imageWidth +  cMin)) imageData
+makeBaseRow startRow cMin cMax Image {..} =
+  let raw = VS.take (4 * (cMax - cMin)) $ VS.drop (4 * (startRow * imageWidth +  cMin)) imageData
   in go Seq.empty (4 * (cMax - cMin)) raw
   where
     go !acc !w !d
