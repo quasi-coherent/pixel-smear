@@ -1,0 +1,30 @@
+name:                pixel-smear
+version:             0.1.0.0
+github:              "quasi-coherent/pixel-smear"
+license:             BSD3
+author:              "Daniel Donohue"
+maintainer:          "d.michael.donohue@gmail.com"
+copyright:           "2020 Daniel Donohue"
+
+extra-source-files:
+- README.md
+
+description: Please see the README on GitHub at <https://github.com/quasi-coherent/pixel-smear#readme>
+
+executables:
+  pixel-smear:
+    main: Main.hs
+    source-dirs: .
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    - -Wall
+    dependencies:
+    - base >= 4.7 && < 5
+    - containers
+    - JuicyPixels
+    - lens
+    - optparse-applicative
+    - split
+    - vector

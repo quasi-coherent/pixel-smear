@@ -1,0 +1,42 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.33.0.
+--
+-- see: https://github.com/sol/hpack
+--
+-- hash: 18936cc5ab9817f872a98e3fa7137657e29caa3afd6e893cfe6687953632f927
+
+name:           pixel-smear
+version:        0.1.0.0
+description:    Please see the README on GitHub at <https://github.com/quasi-coherent/pixel-smear#readme>
+homepage:       https://github.com/quasi-coherent/pixel-smear#readme
+bug-reports:    https://github.com/quasi-coherent/pixel-smear/issues
+author:         Daniel Donohue
+maintainer:     d.michael.donohue@gmail.com
+copyright:      2020 Daniel Donohue
+license:        BSD3
+license-file:   LICENSE
+build-type:     Simple
+extra-source-files:
+    README.md
+
+source-repository head
+  type: git
+  location: https://github.com/quasi-coherent/pixel-smear
+
+executable pixel-smear
+  main-is: Main.hs
+  other-modules:
+      Paths_pixel_smear
+  hs-source-dirs:
+      ./.
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N -Wall
+  build-depends:
+      JuicyPixels
+    , base >=4.7 && <5
+    , containers
+    , lens
+    , optparse-applicative
+    , split
+    , vector
+  default-language: Haskell2010

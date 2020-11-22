@@ -1,0 +1,7 @@
+cradle:
+  cabal:
+    - path: "./Main.hs"
+      component: "pixel-smear:exe:pixel-smear"
+
+dependencies:
+  - package.yaml
