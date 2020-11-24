@@ -98,7 +98,7 @@ makeBaseRow
   -> Image PixelRGBA8
   -> V.Vector PixelRGBA8
 makeBaseRow startRow cMin cMax Image {..} =
-  let raw = VS.take (4 * (cMax - cMin)) $ VS.drop (4 * (startRow * imageWidth +  cMin)) imageData
+  let raw = VS.take (4 * (cMax - cMin)) $ VS.drop (4 * (startRow * (imageWidth - 1) + cMin)) imageData
   in go Seq.empty (4 * (cMax - cMin)) raw
   where
     go !acc !w !d
