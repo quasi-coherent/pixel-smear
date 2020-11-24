@@ -72,7 +72,7 @@ makeSmearedImage
 makeSmearedImage CLI {..} img@Image {..} = runST $ do
   mimg <- unsafeThawImage img
   let rMin = fromMaybe 0 cliRowMin
-      rMax = fromMaybe imageHeight cliRowMax
+      rMax = (fromMaybe imageHeight cliRowMax) - 1
       cMin = fromMaybe 0 cliColMin
       cMax = fromMaybe imageWidth cliColMax
       baseRow = makeBaseRow (if cliSmearDown then rMin else rMax) cMin cMax img
@@ -98,7 +98,7 @@ makeBaseRow
   -> Image PixelRGBA8
   -> V.Vector PixelRGBA8
 makeBaseRow startRow cMin cMax Image {..} =
-  let raw = VS.take (4 * (cMax - cMin)) $ VS.drop (4 * (startRow * (imageWidth - 1) + cMin)) imageData
+  let raw = VS.take (4 * (cMax - cMin)) $ VS.drop (4 * (startRow * imageWidth + cMin)) imageData
   in go Seq.empty (4 * (cMax - cMin)) raw
   where
     go !acc !w !d
